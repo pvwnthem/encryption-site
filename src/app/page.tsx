@@ -1,6 +1,6 @@
 'use client'
 import React, { useState } from 'react';
-import DecryptForm from '@/components/DecryptFrom';
+import DecryptForm from '@/components/DecryptForm';
 import EncryptForm from '@/components/EncryptForm';
 
 
