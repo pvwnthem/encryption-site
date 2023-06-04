@@ -25,7 +25,7 @@ const EncryptForm = () => {
 
       const { cipher, key, iv } = await cryptoService.encrypt(plainData);
       if (inputFile) {
-        const encryptedFile = new Blob([cipher], { type: 'application/octet-stream' });
+        const encryptedFile = new Blob([TextHelper.convertStreamToBase64(cipher), " ", TextHelper.convertStreamToBase64(key), " ", TextHelper.convertStreamToBase64(iv) ], { type: 'application/octet-stream' });
       const encryptedFileUrl = URL.createObjectURL(encryptedFile);
       setEncryptedData({
         cipher: TextHelper.convertStreamToBase64(cipher),
