@@ -24,7 +24,9 @@ const DecryptForm = () => {
         );
 
         cryptoService.decrypt(cipherBuffer, key, ivBuffer).then((res) =>
-        setDecryptedText(res)
+        {
+          setDecryptedText(res) 
+        }  
         );
       });
   };
@@ -48,6 +50,7 @@ const DecryptForm = () => {
         <div className="mt-4">
           <h3 className="font-semibold">Decrypted Text:</h3>
           <pre>{decryptedText}</pre>
+          <img src={decryptedText}></img>
         </div>
       )}
     </div>
