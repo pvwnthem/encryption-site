@@ -6,7 +6,7 @@ import TextHelper from '@/util/base64';
 const DecryptForm = () => {
   const [encryptedData, setEncryptedData] = useState<any>(null);
   const [inputFile, setInputFile] = useState<string | null>(null);
-  const [decryptedText, setDecryptedText] = useState('');
+  const [decryptedData, setDecryptedData] = useState('');
   const [fileUrl, setFileUrl] = useState('')
 
   const handleInputChange = (event: any) => {
@@ -43,7 +43,7 @@ const DecryptForm = () => {
 
         cryptoService.decrypt(cipherBuffer, key, ivBuffer).then((res) =>
         {
-          setDecryptedText(res) 
+          setDecryptedData(res) 
           const encryptedFile = new Blob([res], { type: 'application/octet-stream' });
           const encryptedFileUrl = URL.createObjectURL(encryptedFile);
           setFileUrl(encryptedFileUrl)
@@ -65,7 +65,7 @@ const DecryptForm = () => {
 
         cryptoService.decrypt(cipherBuffer, key, ivBuffer).then((res) =>
         {
-          setDecryptedText(res) 
+          setDecryptedData(res) 
         }  
         );
       });
@@ -89,16 +89,18 @@ const DecryptForm = () => {
       >
         Decrypt
       </button>
-      {decryptedText && (
+      {decryptedData && (
         <div className="mt-4">
           <h3 className="font-semibold">Decrypted Data:</h3>
-          <pre>{decryptedText}</pre>
-          <img src={decryptedText}></img>
+          <pre>{decryptedData}</pre>
+          <img src={decryptedData}></img>
           {fileUrl && (
             <a href={fileUrl} download="encrypted_file.bin">
               Download Decrypted File
             </a>
           )}
+         <button className='p-2 bg-blue-500 text-white rounded-md' onClick={() => {navigator.clipboard.writeText(decryptedData.toString())}} >Copy</button>
+
         </div>
       )}
     </div>

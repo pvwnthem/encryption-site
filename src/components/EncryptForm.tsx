@@ -94,6 +94,7 @@ const EncryptForm = () => {
               Download Encrypted File
             </a>
           )}
+          <button className='p-2 bg-blue-500 text-white rounded-md' onClick={() => {navigator.clipboard.writeText(JSON.stringify(encryptedData))}} >Copy</button>
         </div>
       )}
     </div>
