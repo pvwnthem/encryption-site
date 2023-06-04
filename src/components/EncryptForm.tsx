@@ -6,6 +6,7 @@ const EncryptForm = () => {
   const [inputText, setInputText] = useState('');
   const [inputFile, setInputFile] = useState<any>(null);
   const [encryptedData, setEncryptedData] = useState<any>(null);
+  const [eventFile, setEventFile] = useState<File>()
 
 
 
@@ -14,13 +15,10 @@ const EncryptForm = () => {
     setInputText(event.target.value);
   };
 
-  const handleFileChange = (event: any) => {
-    const file = event.target.files[0];
-    setInputFile(file);
-  };
 
   function onSelectFile(e: React.ChangeEvent<HTMLInputElement>) {
     if (e.target.files && e.target.files.length > 0) {
+      setEventFile(e.target.files[0])
       const reader = new FileReader();
       
       reader.addEventListener('load', () =>
@@ -90,7 +88,7 @@ const EncryptForm = () => {
           <h3 className="font-semibold">Encrypted Data:</h3>
           <pre>{JSON.stringify(encryptedData, null, 2)}</pre>
           {encryptedData.fileUrl && (
-            <a href={encryptedData.fileUrl} download="encrypted_file.bin">
+            <a href={encryptedData.fileUrl} download={eventFile?.name + ".bin"}>
               Download Encrypted File
             </a>
           )}
