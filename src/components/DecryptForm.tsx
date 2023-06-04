@@ -91,7 +91,7 @@ const DecryptForm = () => {
       </button>
       {decryptedText && (
         <div className="mt-4">
-          <h3 className="font-semibold">Decrypted Text:</h3>
+          <h3 className="font-semibold">Decrypted Data:</h3>
           <pre>{decryptedText}</pre>
           <img src={decryptedText}></img>
           {fileUrl && (
