@@ -13,36 +13,6 @@ const DecryptForm = () => {
   const handleInputChange = (event: any) => {
     setEncryptedData(event.target.value);
   };
-  
-  function extractMimeTypeFromBase64(base64Data: string | null): string {
-    const regex = /^data:(.+);base64,/; // Regular expression to match the MIME type
-    const matches = base64Data?.match(regex);
-    if (matches && matches.length > 1) {
-      return matches[1]; // Extract the MIME type from the matched groups
-    } else {
-      return ''; // MIME type not found
-    }
-  }
-
-  function generateFileExtension(mimeType: string) {
-    const mimeToExtMap: any = {
-      'image/jpeg': '.jpg',
-      'image/png': '.png',
-      'image/gif': '.gif',
-      'image/svg+xml': '.svg',
-      'audio/mpeg': '.mp3',
-      'audio/wav': '.wav',
-      'video/mp4': '.mp4',
-      'video/webm': '.webm',
-      // Add more MIME types and their corresponding file extensions as needed
-    };
-  
-    if (mimeType in mimeToExtMap) {
-      return mimeToExtMap[mimeType];
-    } else {
-      return null; // File extension not found
-    }
-  }
    
   function onSelectFile(e: React.ChangeEvent<HTMLInputElement>) {
     if (e.target.files && e.target.files.length > 0) {
@@ -126,7 +96,7 @@ const DecryptForm = () => {
           <img src={decryptedData}></img>
           {fileUrl && (
             
-            <a onClick={() => download(decryptedData, "decrypted" + generateFileExtension(extractMimeTypeFromBase64(decryptedData)), extractMimeTypeFromBase64(decryptedData))}>
+            <a onClick={() => download(decryptedData, "decrypted" + TextHelper.generateFileExtension(TextHelper.extractMimeTypeFromBase64(decryptedData)), TextHelper.extractMimeTypeFromBase64(decryptedData))}>
               Download Decrypted File
             </a>
           )}
