@@ -7,6 +7,7 @@ const DecryptForm = () => {
   const [encryptedData, setEncryptedData] = useState<any>(null);
   const [inputFile, setInputFile] = useState<string | null>(null);
   const [decryptedText, setDecryptedText] = useState('');
+  const [fileUrl, setFileUrl] = useState('')
 
   const handleInputChange = (event: any) => {
     setEncryptedData(event.target.value);
@@ -30,7 +31,7 @@ const DecryptForm = () => {
     if (inputFile) {
       const fileData = inputFile.split("|")
       const keyBuffer = TextHelper.convertBase64ToStream(fileData[1]);
-
+      
       cryptoService.parseKey(keyBuffer).then((key) => {
         const cipherBuffer = TextHelper.convertBase64ToStream(
             fileData[0]
@@ -43,6 +44,9 @@ const DecryptForm = () => {
         cryptoService.decrypt(cipherBuffer, key, ivBuffer).then((res) =>
         {
           setDecryptedText(res) 
+          const encryptedFile = new Blob([res], { type: 'application/octet-stream' });
+          const encryptedFileUrl = URL.createObjectURL(encryptedFile);
+          setFileUrl(encryptedFileUrl)
         }  
         );
       });
@@ -90,6 +94,11 @@ const DecryptForm = () => {
           <h3 className="font-semibold">Decrypted Text:</h3>
           <pre>{decryptedText}</pre>
           <img src={decryptedText}></img>
+          {fileUrl && (
+            <a href={fileUrl} download="encrypted_file.bin">
+              Download Decrypted File
+            </a>
+          )}
         </div>
       )}
     </div>
