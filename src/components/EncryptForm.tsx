@@ -7,49 +7,46 @@ const EncryptForm = () => {
   const [inputFile, setInputFile] = useState<any>(null);
   const [encryptedData, setEncryptedData] = useState<any>(null);
 
-
-
-  
-  const handleInputChange = (event: any) => {
+  const handleInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInputText(event.target.value);
   };
 
-  const handleFileChange = (event: any) => {
-    const file = event.target.files[0];
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
     setInputFile(file);
   };
 
-  function onSelectFile(e: React.ChangeEvent<HTMLInputElement>) {
-    if (e.target.files && e.target.files.length > 0) {
-      const reader = new FileReader();
-      
-      reader.addEventListener('load', () =>
-      {
-         console.log(reader.result?.toString())
-        setInputFile(reader.result?.toString() || '')
-      }
-     
-      );
-      reader.readAsDataURL(e.target.files[0]);
-    }
-  }
   const handleEncrypt = async () => {
     try {
       let plainData: any = inputText;
       if (inputFile) {
         plainData = inputFile;
       }
-      console.log(plainData.length)
+
       const { cipher, key, iv } = await cryptoService.encrypt(plainData);
+      if (inputFile) {
+        const encryptedFile = new Blob([cipher], { type: 'application/octet-stream' });
+      const encryptedFileUrl = URL.createObjectURL(encryptedFile);
       setEncryptedData({
         cipher: TextHelper.convertStreamToBase64(cipher),
         key: TextHelper.convertStreamToBase64(key),
         iv: TextHelper.convertStreamToBase64(iv),
+        fileUrl: encryptedFileUrl,
       });
+      }
+       else {
+        setEncryptedData({
+          cipher: TextHelper.convertStreamToBase64(cipher),
+          key: TextHelper.convertStreamToBase64(key),
+          iv: TextHelper.convertStreamToBase64(iv),
+          
+        });
+       }
+
+      
     } catch (error) {
       console.error('Encryption failed:', error);
     }
-    
   };
 
   return (
@@ -60,21 +57,19 @@ const EncryptForm = () => {
         value={inputText}
         onChange={handleInputChange}
       />
-      <input
-        type="file"
-        onChange={onSelectFile}
-        
-      />
-      <button
-        className="px-4 py-2 bg-blue-500 text-white rounded"
-        onClick={handleEncrypt}
-      >
+      <input type="file" onChange={handleFileChange} />
+      <button className="px-4 py-2 bg-blue-500 text-white rounded" onClick={handleEncrypt}>
         Encrypt
       </button>
       {encryptedData && (
         <div className="mt-4">
           <h3 className="font-semibold">Encrypted Data:</h3>
           <pre>{JSON.stringify(encryptedData, null, 2)}</pre>
+          {encryptedData.fileUrl && (
+            <a href={encryptedData.fileUrl} download="encrypted_file.bin">
+              Download Encrypted File
+            </a>
+          )}
         </div>
       )}
     </div>
