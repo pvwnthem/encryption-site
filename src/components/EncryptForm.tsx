@@ -7,15 +7,31 @@ const EncryptForm = () => {
   const [inputFile, setInputFile] = useState<any>(null);
   const [encryptedData, setEncryptedData] = useState<any>(null);
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+
+
+  
+  const handleInputChange = (event: any) => {
     setInputText(event.target.value);
   };
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
+  const handleFileChange = (event: any) => {
+    const file = event.target.files[0];
     setInputFile(file);
   };
 
+  function onSelectFile(e: React.ChangeEvent<HTMLInputElement>) {
+    if (e.target.files && e.target.files.length > 0) {
+      const reader = new FileReader();
+      
+      reader.addEventListener('load', () =>
+      {
+        setInputFile(reader.result?.toString() || '')
+      }
+     
+      );
+      reader.readAsDataURL(e.target.files[0]);
+    }
+  }
   const handleEncrypt = async () => {
     try {
       let plainData: any = inputText;
@@ -25,7 +41,7 @@ const EncryptForm = () => {
 
       const { cipher, key, iv } = await cryptoService.encrypt(plainData);
       if (inputFile) {
-        const encryptedFile = new Blob([TextHelper.convertStreamToBase64(cipher), " ", TextHelper.convertStreamToBase64(key), " ", TextHelper.convertStreamToBase64(iv) ], { type: 'application/octet-stream' });
+        const encryptedFile = new Blob([TextHelper.convertStreamToBase64(cipher), "|", TextHelper.convertStreamToBase64(key), "|", TextHelper.convertStreamToBase64(iv) ], { type: 'application/octet-stream' });
       const encryptedFileUrl = URL.createObjectURL(encryptedFile);
       setEncryptedData({
         cipher: TextHelper.convertStreamToBase64(cipher),
@@ -48,17 +64,25 @@ const EncryptForm = () => {
       console.error('Encryption failed:', error);
     }
   };
+  
 
   return (
-    <div className="max-w-md mx-auto p-4">
+    <div className="max-w-md mx-left p-4">
       <textarea
         className="w-full p-2 mb-4 border border-gray-300 rounded"
         placeholder="Enter text to encrypt"
         value={inputText}
         onChange={handleInputChange}
       />
-      <input type="file" onChange={handleFileChange} />
-      <button className="px-4 py-2 bg-blue-500 text-white rounded" onClick={handleEncrypt}>
+      <input
+        type="file"
+        onChange={onSelectFile}
+        
+      />
+      <button
+        className="px-4 py-2 bg-blue-500 text-white rounded"
+        onClick={handleEncrypt}
+      >
         Encrypt
       </button>
       {encryptedData && (
