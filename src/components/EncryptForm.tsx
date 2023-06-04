@@ -66,6 +66,7 @@ const EncryptForm = () => {
 
   return (
     <div className="max-w-md mx-left p-4">
+      <h1>This is not secure, please dont use this to actually encrypt and store your files, it stores the encryption key in the file along with the data</h1>
       <textarea
         className="w-full p-2 mb-4 border border-gray-300 rounded"
         placeholder="Enter text to encrypt"
