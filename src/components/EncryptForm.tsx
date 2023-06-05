@@ -8,7 +8,7 @@ const EncryptForm = () => {
   const [encryptedData, setEncryptedData] = useState<any>(null);
   const [eventFile, setEventFile] = useState<File>()
   const [encryptionKey, setEncryptionKey] = useState('')
-
+  const [mode, setMode] = useState(true)
 
 
   
@@ -40,7 +40,7 @@ const EncryptForm = () => {
 
       const { cipher, key, iv } = encryptionKey ? await cryptoService.encrypt(plainData, encryptionKey) : await cryptoService.encrypt(plainData);
       if (inputFile) {
-        const encryptedFile = new Blob([TextHelper.convertStreamToBase64(cipher), "|", TextHelper.convertStreamToBase64(key), "|", TextHelper.convertStreamToBase64(iv) ], { type: 'application/octet-stream' });
+        const encryptedFile = mode ? new Blob([TextHelper.convertStreamToBase64(cipher), "|", TextHelper.convertStreamToBase64(iv) ], { type: 'application/octet-stream' }) : new Blob([TextHelper.convertStreamToBase64(cipher), "|", TextHelper.convertStreamToBase64(key), "|", TextHelper.convertStreamToBase64(iv) ], { type: 'application/octet-stream' });
       const encryptedFileUrl = URL.createObjectURL(encryptedFile);
       setEncryptedData({
         cipher: TextHelper.convertStreamToBase64(cipher),
@@ -85,8 +85,15 @@ const EncryptForm = () => {
         onChange={onSelectFile}
         
       />
+      <input 
+        type='checkbox'
+        checked={mode}
+        onChange={() => setMode(!mode)}
+      />
+      <span className="text-gray-700">Secure Mode</span>
+      
       <button
-        className="px-4 py-2 bg-blue-500 text-white rounded"
+        className="px-4 py-2 bg-blue-500 mt-2 text-white rounded"
         onClick={handleEncrypt}
       >
         Encrypt

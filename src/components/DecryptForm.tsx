@@ -10,6 +10,7 @@ const DecryptForm = () => {
   const [decryptedData, setDecryptedData] = useState('');
   const [fileUrl, setFileUrl] = useState('')
   const [encryptionKey, setEncryptionKey] = useState('')
+  const [mode, setMode] = useState(true)
 
   const handleInputChange = (event: any) => {
     setEncryptedData(event.target.value);
@@ -38,9 +39,11 @@ const DecryptForm = () => {
             fileData[0]
         );
 
-        const ivBuffer = TextHelper.convertBase64ToStream<Uint8Array>(
+        const ivBuffer = mode ? TextHelper.convertBase64ToStream<Uint8Array>(
+          fileData[1]
+        ) : TextHelper.convertBase64ToStream<Uint8Array>(
           fileData[2]
-        );
+        )
 
         cryptoService.decrypt(cipherBuffer, key, ivBuffer).then((res) =>
         {
@@ -90,6 +93,12 @@ const DecryptForm = () => {
         onChange={(e) => setEncryptionKey(e.target.value)}
       />
       <input type="file" onChange={onSelectFile} />
+      <input 
+        type='checkbox'
+        checked={mode}
+        onChange={() => setMode(!mode)}
+      />
+      <span className="text-gray-700">Secure Mode</span>
       <button
         className="px-4 py-2 bg-blue-500 text-white rounded"
         onClick={handleDecrypt}
