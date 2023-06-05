@@ -1,10 +1,12 @@
 'use client'
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import cryptoService from '@/services/encryption.service';
 import TextHelper from '@/util/base64';
 import download from 'downloadjs';
 
 const DecryptForm = () => {
+  const history = useNavigate();
   const [encryptedData, setEncryptedData] = useState<any>(null);
   const [inputFile, setInputFile] = useState<string | null>(null);
   const [decryptedData, setDecryptedData] = useState('');
@@ -160,6 +162,12 @@ const DecryptForm = () => {
         </button>
       </div>
     )}
+    <button
+        className="w-full px-4 py-2 mt-4 bg-gray-300 text-gray-700 rounded hover:bg-gray-400"
+        onClick={() => {history("/help"); window.location.reload();}}
+      >
+        Help
+      </button>
   </div>
 
   );

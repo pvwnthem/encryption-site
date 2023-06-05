@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import cryptoService from '@/services/encryption.service';
 import TextHelper from '@/util/base64';
+import { useNavigate } from 'react-router-dom';
 
 const EncryptForm = () => {
   const [inputText, setInputText] = useState('');
@@ -9,8 +10,7 @@ const EncryptForm = () => {
   const [eventFile, setEventFile] = useState<File>()
   const [encryptionKey, setEncryptionKey] = useState('')
   const [mode, setMode] = useState(true)
-
-
+  const history = useNavigate();
   
   const handleInputChange = (event: any) => {
     setInputText(event.target.value);
@@ -159,6 +159,12 @@ const EncryptForm = () => {
       </p>
     </div>
   )}
+  <button
+        className="w-full px-4 py-2 mt-4 bg-gray-300 text-gray-700 rounded hover:bg-gray-400"
+        onClick={() => {history("/help"); window.location.reload();}}
+      >
+        Help
+      </button>
 </div>
 
 
