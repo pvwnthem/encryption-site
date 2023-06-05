@@ -9,6 +9,7 @@ const DecryptForm = () => {
   const [inputFile, setInputFile] = useState<string | null>(null);
   const [decryptedData, setDecryptedData] = useState('');
   const [fileUrl, setFileUrl] = useState('')
+  const [encryptionKey, setEncryptionKey] = useState('')
 
   const handleInputChange = (event: any) => {
     setEncryptedData(event.target.value);
@@ -30,7 +31,7 @@ const DecryptForm = () => {
   const handleDecrypt = async () => {
     if (inputFile) {
       const fileData = inputFile.split("|")
-      const keyBuffer = TextHelper.convertBase64ToStream(fileData[1]);
+      const keyBuffer = encryptionKey ? TextHelper.convertBase64ToStream(encryptionKey) : TextHelper.convertBase64ToStream(fileData[1]);
       
       cryptoService.parseKey(keyBuffer).then((key) => {
         const cipherBuffer = TextHelper.convertBase64ToStream(
@@ -52,7 +53,7 @@ const DecryptForm = () => {
       });
 
     } else {
-      const keyBuffer = TextHelper.convertBase64ToStream(JSON.parse(encryptedData).key);
+      const keyBuffer = encryptionKey ? TextHelper.convertBase64ToStream(encryptionKey) : TextHelper.convertBase64ToStream(JSON.parse(encryptedData).key);
 
       cryptoService.parseKey(keyBuffer).then((key) => {
         const cipherBuffer = TextHelper.convertBase64ToStream(
@@ -81,6 +82,12 @@ const DecryptForm = () => {
         placeholder="Enter encrypted JSON data"
         value={encryptedData}
         onChange={handleInputChange}
+      />
+      <input
+        className="w-full p-2 mb-4 border border-gray-300 rounded"
+        placeholder="Enter encrpytion key"
+        value={encryptionKey}
+        onChange={(e) => setEncryptionKey(e.target.value)}
       />
       <input type="file" onChange={onSelectFile} />
       <button

@@ -22,14 +22,14 @@ class CryptoService<T extends AesKeyGenParams | HmacKeyGenParams | Pbkdf2Params 
 
   private generateKey = async (): Promise<CryptoKey> => window.crypto.subtle.generateKey(this.algorithm, true, this.key);
 
-  public async encrypt(data: string): Promise<any> {
+  public async encrypt(data: string, encryptionKey? : string): Promise<any> {
     const iv = this.generateIv();
     const algo = { ...this.algorithm, iv };
     const cryptoKey = await this.generateKey();    
     const encoded = TextManipulationHelper.encode(data);
-
-    const cipher = await window.crypto.subtle.encrypt(algo, cryptoKey, encoded);
-    const key = await this.readKey(cryptoKey);
+    
+    const cipher = encryptionKey ? await window.crypto.subtle.encrypt(algo, await window.crypto.subtle.importKey( "raw", TextManipulationHelper.convertBase64ToStream(encryptionKey), { name: "AES-GCM", length: 256 }, true, ['encrypt', 'decrypt']), encoded)  : await window.crypto.subtle.encrypt(algo, cryptoKey, encoded);
+    const key = encryptionKey ? await this.readKey(await window.crypto.subtle.importKey( "raw", TextManipulationHelper.convertBase64ToStream(encryptionKey), { name: "AES-GCM", length: 256 }, true, ['encrypt', 'decrypt'])) : await this.readKey(cryptoKey);
 
     return { key, cipher, iv };
   }
