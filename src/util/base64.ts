@@ -14,6 +14,7 @@ function generateFileExtension(mimeType: string) {
     'audio/wav': '.wav',
     'video/mp4': '.mp4',
     'video/webm': '.webm',
+    'text/plain': '.txt'
     // Add more MIME types and their corresponding file extensions as needed
   };
 
