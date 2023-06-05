@@ -100,7 +100,7 @@ const DecryptForm = () => {
       />
       <span className="text-gray-700">Secure Mode</span>
       <button
-        className="px-4 py-2 bg-blue-500 text-white rounded"
+        className="px-4 mt-2 py-2 bg-blue-500 text-white rounded"
         onClick={handleDecrypt}
       >
         Decrypt
@@ -116,7 +116,7 @@ const DecryptForm = () => {
               Download Decrypted File
             </a>
           )}
-         <button className='p-2 bg-blue-500 text-white rounded-md' onClick={() => {navigator.clipboard.writeText(decryptedData.toString())}} >Copy</button>
+         <button className='p-2 bg-blue-500 text-white rounded-md ml-2' onClick={() => {navigator.clipboard.writeText(decryptedData.toString())}} >Copy</button>
 
         </div>
       )}

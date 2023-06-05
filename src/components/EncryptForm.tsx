@@ -107,7 +107,9 @@ const EncryptForm = () => {
               Download Encrypted File
             </a>
           )}
-          <button className='p-2 bg-blue-500 text-white rounded-md' onClick={() => {navigator.clipboard.writeText(JSON.stringify(encryptedData))}} >Copy</button>
+          <button className='p-2 bg-blue-500 text-white rounded-md ml-2' onClick={() => {navigator.clipboard.writeText(JSON.stringify(encryptedData))}} >Copy</button>
+          <button className='p-2 bg-blue-500 text-white rounded-md ml-2' onClick={() => {navigator.clipboard.writeText(JSON.parse(JSON.stringify((encryptedData))).key)}} >Copy Key</button>
+          <p>You will need the key to decrypt your file if you are using secure mode so make sure to save it</p>
         </div>
       )}
     </div>
