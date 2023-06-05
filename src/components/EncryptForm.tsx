@@ -66,53 +66,102 @@ const EncryptForm = () => {
   
 
   return (
-    <div className="max-w-md mx-left p-4">
-      <h1>This is not secure, please dont use this to actually encrypt and store your files, it stores the encryption key in the file along with the data</h1>
-      <textarea
-        className="w-full p-2 mb-4 border border-gray-300 rounded"
-        placeholder="Enter text to encrypt"
-        value={inputText}
-        onChange={handleInputChange}
-      />
-      <input
-        className="w-full p-2 mb-4 border border-gray-300 rounded"
-        placeholder="Enter encrpytion key"
-        value={encryptionKey}
-        onChange={(e) => setEncryptionKey(e.target.value)}
-      />
-      <input
-        type="file"
-        onChange={onSelectFile}
-        
-      />
-      <input 
-        type='checkbox'
-        checked={mode}
-        onChange={() => setMode(!mode)}
-      />
-      <span className="text-gray-700">Secure Mode</span>
-      
-      <button
-        className="px-4 py-2 bg-blue-500 mt-2 text-white rounded"
-        onClick={handleEncrypt}
-      >
-        Encrypt
-      </button>
-      {encryptedData && (
-        <div className="mt-4">
-          <h3 className="font-semibold">Encrypted Data:</h3>
-          <pre>{JSON.stringify(encryptedData, null, 2)}</pre>
-          {encryptedData.fileUrl && (
-            <a href={encryptedData.fileUrl} download={eventFile?.name + ".bin"}>
-              Download Encrypted File
-            </a>
-          )}
-          <button className='p-2 bg-blue-500 text-white rounded-md ml-2' onClick={() => {navigator.clipboard.writeText(JSON.stringify(encryptedData))}} >Copy</button>
-          <button className='p-2 bg-blue-500 text-white rounded-md ml-2' onClick={() => {navigator.clipboard.writeText(JSON.parse(JSON.stringify((encryptedData))).key)}} >Copy Key</button>
-          <p>You will need the key to decrypt your file if you are using secure mode so make sure to save it</p>
-        </div>
+    <div className="max-w-lg  p-12 bg-white rounded-lg shadow shadow-2xl">
+  <h1 className="text-2xl py-2 font-bold mb-4">
+    Encrypt Data
+  </h1>
+  <div className="mb-4">
+    <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="inputText">
+      Text to Encrypt
+    </label>
+    <textarea
+      id="inputText"
+      className="w-full p-2 border border-gray-300 rounded"
+      placeholder="Enter text to encrypt"
+      value={inputText}
+      onChange={handleInputChange}
+    />
+  </div>
+  <div className="mb-4">
+    <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="encryptionKey">
+      Encryption Key
+    </label>
+    <input
+      id="encryptionKey"
+      className="w-full p-2 border border-gray-300 rounded"
+      placeholder="Enter encryption key"
+      value={encryptionKey}
+      onChange={(e) => setEncryptionKey(e.target.value)}
+    />
+  </div>
+  <div className="mb-4">
+    <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="fileInput">
+      Select File
+    </label>
+    <input
+      id="fileInput"
+      type="file"
+      onChange={onSelectFile}
+      className="w-full p-2 border border-gray-300 rounded"
+    />
+  </div>
+  <div className="flex items-center mb-4">
+    <input
+      id="secureModeCheckbox"
+      type="checkbox"
+      checked={mode}
+      onChange={() => setMode(!mode)}
+      className="mr-2"
+    />
+    <label className="text-gray-700" htmlFor="secureModeCheckbox">
+      Secure Mode
+    </label>
+  </div>
+  <button
+    className="w-full px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+    onClick={handleEncrypt}
+  >
+    Encrypt
+  </button>
+  {encryptedData && (
+    <div className="mt-4">
+      <h3 className="font-semibold">Encrypted Data:</h3>
+      <div className="overflow-x-auto">
+        <pre>{JSON.stringify(encryptedData, null, 4)}</pre>
+      </div>
+      {encryptedData.fileUrl && (
+        <a
+          href={encryptedData.fileUrl}
+          download={eventFile?.name + ".bin"}
+          className="text-blue-500 underline"
+        >
+          Download Encrypted File
+        </a>
       )}
+      <button
+        className="p-2 bg-blue-500 text-white rounded-md ml-2"
+        onClick={() => {
+          navigator.clipboard.writeText(JSON.stringify(encryptedData));
+        }}
+      >
+        Copy
+      </button>
+      <button
+        className="p-2 bg-blue-500 text-white rounded-md ml-2"
+        onClick={() => {
+          navigator.clipboard.writeText(JSON.parse(JSON.stringify(encryptedData)).key);
+        }}
+      >
+        Copy Key
+      </button>
+      <p className="text-sm text-gray-700 mt-2">
+        You will need the key to decrypt your file if you are using secure mode, so make sure to save it.
+      </p>
     </div>
+  )}
+</div>
+
+
   );
 };
 
