@@ -15,7 +15,8 @@ function generateFileExtension(mimeType: string) {
     'video/mp4': '.mp4',
     'video/webm': '.webm',
     'text/plain': '.txt',
-    "application/x-msdownload": '.exe'
+    'application/x-msdownload': '.exe',
+    'application/x-zip-compressed': '.zip'
     // Add more MIME types and their corresponding file extensions as needed
   };
 
