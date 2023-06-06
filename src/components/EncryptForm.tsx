@@ -181,17 +181,23 @@ const EncryptForm = () => {
           >
             Copy
           </button>
-          <button
-            className="p-2 bg-blue-500 text-white rounded-md ml-2"
-            onClick={() => {
-              mode ? navigator.clipboard.writeText(encryptionKey) : navigator.clipboard.writeText(JSON.parse(JSON.stringify(encryptedData)).key);
-            }}
-          >
+          {mode && (
+            <button
+              className="p-2 bg-blue-500 text-white rounded-md ml-2"
+              onClick={() => {
+                mode ? navigator.clipboard.writeText(encryptionKey) : navigator.clipboard.writeText(JSON.parse(JSON.stringify(encryptedData)).key);
+              }}
+            >
             Copy Key
           </button>
-          <p className="text-sm text-gray-700 mt-2">
-            You will need the key to decrypt your file if you are using secure mode, so make sure to save it.
-          </p>
+          )}
+          
+          {mode && (
+            <p className="text-sm text-gray-700 mt-2">
+              You will need the key to decrypt your file if you are using secure mode, so make sure to save it.
+            </p>
+          )}
+          
         </div>
       )}
       <button
