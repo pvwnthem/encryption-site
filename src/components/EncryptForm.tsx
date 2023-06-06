@@ -54,14 +54,14 @@ const EncryptForm = () => {
 
         setEncryptedData({
           cipher: TextHelper.convertStreamToBase64(cipher),
-          key: TextHelper.convertStreamToBase64(key),
+          key: mode ? "Secure mode has hidden this key" : TextHelper.convertStreamToBase64(key),
           iv: TextHelper.convertStreamToBase64(iv),
           fileUrl: encryptedFileUrl,
         });
       } else {
         setEncryptedData({
           cipher: TextHelper.convertStreamToBase64(cipher),
-          key: TextHelper.convertStreamToBase64(key),
+          key: mode ? "Secure mode has hidden this key" : TextHelper.convertStreamToBase64(key),
           iv: TextHelper.convertStreamToBase64(iv),
         });
       }
