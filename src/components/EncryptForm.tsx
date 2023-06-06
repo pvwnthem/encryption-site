@@ -132,7 +132,7 @@ const EncryptForm = () => {
         <div className="mt-4">
           <h3 className="font-semibold">Encrypted Data:</h3>
           <div className="overflow-x-auto">
-            <pre>{JSON.stringify(encryptedData, null, 4)}</pre>
+            <pre>{JSON.stringify(encryptedData).length > 2048 ? "Sorry this data is too large to display!" : JSON.stringify(encryptedData, null, 4)}</pre>
           </div>
           {encryptedData.fileUrl && (
             <a

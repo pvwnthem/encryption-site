@@ -132,7 +132,7 @@ const DecryptForm = () => {
         <div className="mt-4">
           <h3 className="font-semibold">Decrypted Data:</h3>
           <div className="overflow-x-auto">
-            <pre>{decryptedData}</pre>
+            <pre>{decryptedData.length > 2048 ? "Sorry this data is too large to display!" : decryptedData}</pre>
           </div>
           <img src={decryptedData} alt="Decrypted Image" />
           {fileUrl && (
