@@ -93,23 +93,28 @@ const EncryptForm = () => {
         />
       </div>
       <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="encryptionKey">
-          Encryption Key
-        </label>
-        <input
-          id="encryptionKey"
-          className="w-full p-2 border border-gray-300 rounded"
-          placeholder="Enter encryption key"
-          value={encryptionKey}
-          onChange={(e) => setEncryptionKey(e.target.value)}
-        />
-        <button 
-          className='bg-blue-500 text-white rounded hover:bg-blue-600 mt-2 w-full px-4 py-2'
-          onClick={handleGenerateKey}
-        >
-          Generate Key
-        </button>
+        {mode && (
+            <>
+              <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="encryptionKey">
+                Encryption Key
+              </label>
+              <input
+                id="encryptionKey"
+                className="w-full p-2 border border-gray-300 rounded"
+                placeholder="Enter encryption key"
+                value={encryptionKey}
+                onChange={(e) => setEncryptionKey(e.target.value)}
+              />
+              <button 
+                className='bg-blue-500 text-white rounded hover:bg-blue-600 mt-2 w-full px-4 py-2'
+                onClick={handleGenerateKey}
+              >
+                Generate Key
+              </button>
+            </>
+        )}
       </div>
+      
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="fileInput">
           Select File

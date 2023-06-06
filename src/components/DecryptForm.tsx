@@ -88,16 +88,21 @@ const DecryptForm = () => {
         />
       </div>
       <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="encryptionKey">
-          Encryption Key
-        </label>
-        <input
-          id="encryptionKey"
-          className="w-full p-2 border border-gray-300 rounded"
-          placeholder="Enter encryption key"
-          value={encryptionKey}
-          onChange={(e) => setEncryptionKey(e.target.value)}
-        />
+        {mode && (
+          <>
+            <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="encryptionKey">
+              Encryption Key
+            </label>
+            <input
+              id="encryptionKey"
+              className="w-full p-2 border border-gray-300 rounded"
+              placeholder="Enter encryption key"
+              value={encryptionKey}
+              onChange={(e) => setEncryptionKey(e.target.value)}
+            />
+          </>
+        )}
+        
       </div>
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="fileInput">
