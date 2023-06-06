@@ -156,7 +156,6 @@ const DecryptForm = () => {
           <img src={decryptedData} alt="Decrypted Image" />
           {fileUrl && (
             <a
-              href={fileUrl}
               onClick={() =>
                 download(
                   decryptedData,
