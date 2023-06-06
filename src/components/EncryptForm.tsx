@@ -20,6 +20,11 @@ const EncryptForm = () => {
     setInputText(event.target.value);
   };
 
+  const handleGenerateKey = async () => {
+    const key: CryptoKey = await cryptoService.generateKey()
+    setEncryptionKey(TextHelper.convertStreamToBase64(await cryptoService.readKey(key)))
+  };
+
   const onSelectFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       setEventFile(e.target.files[0]);
@@ -98,6 +103,12 @@ const EncryptForm = () => {
           value={encryptionKey}
           onChange={(e) => setEncryptionKey(e.target.value)}
         />
+        <button 
+          className='bg-blue-500 text-white rounded hover:bg-blue-600 mt-2 w-full px-4 py-2'
+          onClick={handleGenerateKey}
+        >
+          Generate Key
+        </button>
       </div>
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="fileInput">

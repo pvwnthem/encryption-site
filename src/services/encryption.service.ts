@@ -19,7 +19,7 @@ class CryptoService<T extends AesKeyGenParams | HmacKeyGenParams | Pbkdf2Params 
   public readKey = async (key: CryptoKey): Promise<ArrayBuffer> => window.crypto.subtle.exportKey("raw", key);
 
   // Generate a new encryption key
-  private generateKey = async (): Promise<CryptoKey> => window.crypto.subtle.generateKey(this.algorithm, true, this.key);
+  public generateKey = async (): Promise<CryptoKey> => window.crypto.subtle.generateKey(this.algorithm, true, this.key);
 
   // Encrypt data using the encryption key
   public encrypt = async (data: string, encryptionKey? : string) => {
