@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import cryptoService from '@/services/encryption.service';
 import TextHelper from '@/util/base64';
 import download from 'downloadjs';
+import ErrorMessage from './errors/Error';
 
 const DecryptForm = () => {
   // State variables
@@ -14,7 +15,8 @@ const DecryptForm = () => {
   const [decryptedData, setDecryptedData] = useState('');
   const [fileUrl, setFileUrl] = useState('');
   const [encryptionKey, setEncryptionKey] = useState('');
-  const [mode, setMode] = useState(true);
+  const [mode, setMode] = useState<boolean>(true);
+  const [error, setError] = useState<string>('')
 
   // Event handlers
   const handleInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -35,41 +37,53 @@ const DecryptForm = () => {
   }
 
   const handleDecrypt = async () => {
-    if (inputFile) {
-      const fileData = inputFile.split('|');
-      const keyBuffer = encryptionKey
-        ? TextHelper.convertBase64ToStream(encryptionKey)
-        : TextHelper.convertBase64ToStream(fileData[1]);
 
-      cryptoService.parseKey(keyBuffer).then((key) => {
-        const cipherBuffer = TextHelper.convertBase64ToStream(fileData[0]);
-
-        const ivBuffer = mode
-          ? TextHelper.convertBase64ToStream<Uint8Array>(fileData[1])
-          : TextHelper.convertBase64ToStream<Uint8Array>(fileData[2]);
-
-        cryptoService.decrypt(cipherBuffer, key, ivBuffer).then((res) => {
-          setDecryptedData(res);
-          const encryptedFile = new Blob([res], { type: 'application/octet-stream' });
-          const encryptedFileUrl = URL.createObjectURL(encryptedFile);
-          setFileUrl(encryptedFileUrl);
-        });
-      });
-    } else {
-      const keyBuffer = encryptionKey
-        ? TextHelper.convertBase64ToStream(encryptionKey)
-        : TextHelper.convertBase64ToStream(JSON.parse(encryptedData).key);
-
-      cryptoService.parseKey(keyBuffer).then((key) => {
-        const cipherBuffer = TextHelper.convertBase64ToStream(JSON.parse(encryptedData).cipher);
-
-        const ivBuffer = TextHelper.convertBase64ToStream<Uint8Array>(JSON.parse(encryptedData).iv);
-
-        cryptoService.decrypt(cipherBuffer, key, ivBuffer).then((res) => {
-          setDecryptedData(res);
-        });
-      });
+    if (mode && !encryptionKey) {
+      setError('When using secure mode you must provide an encryption key')
+      return
     }
+
+    if (inputFile || encryptedData) {
+      if (inputFile) {
+        const fileData = inputFile.split('|');
+        const keyBuffer = encryptionKey
+          ? TextHelper.convertBase64ToStream(encryptionKey)
+          : TextHelper.convertBase64ToStream(fileData[1]);
+  
+        cryptoService.parseKey(keyBuffer).then((key) => {
+          const cipherBuffer = TextHelper.convertBase64ToStream(fileData[0]);
+  
+          const ivBuffer = mode
+            ? TextHelper.convertBase64ToStream<Uint8Array>(fileData[1])
+            : TextHelper.convertBase64ToStream<Uint8Array>(fileData[2]);
+  
+          cryptoService.decrypt(cipherBuffer, key, ivBuffer).then((res) => {
+            setDecryptedData(res);
+            const encryptedFile = new Blob([res], { type: 'application/octet-stream' });
+            const encryptedFileUrl = URL.createObjectURL(encryptedFile);
+            setFileUrl(encryptedFileUrl);
+          });
+        });
+      } else {
+        const keyBuffer = encryptionKey
+          ? TextHelper.convertBase64ToStream(encryptionKey)
+          : TextHelper.convertBase64ToStream(JSON.parse(encryptedData).key);
+  
+        cryptoService.parseKey(keyBuffer).then((key) => {
+          const cipherBuffer = TextHelper.convertBase64ToStream(JSON.parse(encryptedData).cipher);
+  
+          const ivBuffer = TextHelper.convertBase64ToStream<Uint8Array>(JSON.parse(encryptedData).iv);
+  
+          cryptoService.decrypt(cipherBuffer, key, ivBuffer).then((res) => {
+            setDecryptedData(res);
+          });
+        });
+      }
+      setError('') // set a blank error on successful decryption
+    } else {
+      setError('Please make sure all fields are filled in before submitting')
+    }
+    
   };
 
   return (
@@ -173,6 +187,9 @@ const DecryptForm = () => {
       >
         Help
       </button>
+      {error && (
+        <ErrorMessage message={error} />
+      )}
     </div>
   );
 };

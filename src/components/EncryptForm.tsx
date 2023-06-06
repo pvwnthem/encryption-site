@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import cryptoService from '@/services/encryption.service';
 import TextHelper from '@/util/base64';
 import { useNavigate } from 'react-router-dom';
+import ErrorMessage from './errors/Error';
 
 const EncryptForm = () => {
   // State variables
@@ -13,6 +14,7 @@ const EncryptForm = () => {
   const [eventFile, setEventFile] = useState<File>();
   const [encryptionKey, setEncryptionKey] = useState('');
   const [mode, setMode] = useState(true);
+  const [error, setError] = useState<string>('')
   const history = useNavigate();
 
   // Event handlers
@@ -39,40 +41,52 @@ const EncryptForm = () => {
   };
 
   const handleEncrypt = async () => {
-    try {
-      let plainData: any = inputText;
 
-      if (inputFile) {
-        plainData = inputFile;
-      }
-
-      const { cipher, key, iv } = encryptionKey
-        ? await cryptoService.encrypt(plainData, encryptionKey)
-        : await cryptoService.encrypt(plainData);
-
-      if (inputFile) {
-        const encryptedFile = mode
-          ? new Blob([TextHelper.convertStreamToBase64(cipher), '|', TextHelper.convertStreamToBase64(iv)], { type: 'application/octet-stream' })
-          : new Blob([TextHelper.convertStreamToBase64(cipher), '|', TextHelper.convertStreamToBase64(key), '|', TextHelper.convertStreamToBase64(iv)], { type: 'application/octet-stream' });
-
-        const encryptedFileUrl = URL.createObjectURL(encryptedFile);
-
-        setEncryptedData({
-          cipher: TextHelper.convertStreamToBase64(cipher),
-          key: mode ? "Secure mode has hidden this key" : TextHelper.convertStreamToBase64(key),
-          iv: TextHelper.convertStreamToBase64(iv),
-          fileUrl: encryptedFileUrl,
-        });
-      } else {
-        setEncryptedData({
-          cipher: TextHelper.convertStreamToBase64(cipher),
-          key: mode ? "Secure mode has hidden this key" : TextHelper.convertStreamToBase64(key),
-          iv: TextHelper.convertStreamToBase64(iv),
-        });
-      }
-    } catch (error) {
-      console.error('Encryption failed:', error);
+    if (mode && !encryptionKey) {
+      setError('When using secure mode you must provide an encryption key')
+      return
     }
+    
+    if (inputText || inputFile) {
+      try {
+        let plainData: any = inputText;
+  
+        if (inputFile) {
+          plainData = inputFile;
+        }
+  
+        const { cipher, key, iv } = encryptionKey
+          ? await cryptoService.encrypt(plainData, encryptionKey)
+          : await cryptoService.encrypt(plainData);
+  
+        if (inputFile) {
+          const encryptedFile = mode
+            ? new Blob([TextHelper.convertStreamToBase64(cipher), '|', TextHelper.convertStreamToBase64(iv)], { type: 'application/octet-stream' })
+            : new Blob([TextHelper.convertStreamToBase64(cipher), '|', TextHelper.convertStreamToBase64(key), '|', TextHelper.convertStreamToBase64(iv)], { type: 'application/octet-stream' });
+  
+          const encryptedFileUrl = URL.createObjectURL(encryptedFile);
+  
+          setEncryptedData({
+            cipher: TextHelper.convertStreamToBase64(cipher),
+            key: mode ? "Secure mode has hidden this key" : TextHelper.convertStreamToBase64(key),
+            iv: TextHelper.convertStreamToBase64(iv),
+            fileUrl: encryptedFileUrl,
+          });
+        } else {
+          setEncryptedData({
+            cipher: TextHelper.convertStreamToBase64(cipher),
+            key: mode ? "Secure mode has hidden this key" : TextHelper.convertStreamToBase64(key),
+            iv: TextHelper.convertStreamToBase64(iv),
+          });
+        }
+        setError('') // set a blank error on successful encryption
+      } catch (error) {
+        setError('Encryption failed: ' + error);
+      }
+    } else {
+      setError('Please make sure all fields are filled in before submitting')
+    }
+    
   };
 
   return (
@@ -114,7 +128,7 @@ const EncryptForm = () => {
             </>
         )}
       </div>
-      
+
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="fileInput">
           Select File
@@ -186,6 +200,9 @@ const EncryptForm = () => {
       >
         Help
       </button>
+      {error && (
+        <ErrorMessage message={error} />
+      )}
     </div>
   );
 };
