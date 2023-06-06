@@ -165,7 +165,7 @@ const EncryptForm = () => {
           <button
             className="p-2 bg-blue-500 text-white rounded-md ml-2"
             onClick={() => {
-              navigator.clipboard.writeText(JSON.parse(JSON.stringify(encryptedData)).key);
+              mode ? navigator.clipboard.writeText(encryptionKey) : navigator.clipboard.writeText(JSON.parse(JSON.stringify(encryptedData)).key);
             }}
           >
             Copy Key
