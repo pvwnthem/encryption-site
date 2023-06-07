@@ -1,3 +1,5 @@
+'use client'
+
 import React, { useState } from 'react';
 import cryptoService from '@/services/encryption.service';
 import TextHelper from '@/util/base64';
