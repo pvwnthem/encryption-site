@@ -11,7 +11,7 @@ const DecryptForm = () => {
   // State variables
   const history = useNavigate();
   const [encryptedData, setEncryptedData] = useState<any>(null);
-  const [inputFile, setInputFile] = useState<string | null>(null);
+  const [inputFile, setInputFile] = useState<any>(null);
   const [decryptedData, setDecryptedData] = useState('');
   const [fileUrl, setFileUrl] = useState('');
   const [encryptionKey, setEncryptionKey] = useState('');
