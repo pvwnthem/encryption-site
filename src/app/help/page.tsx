@@ -21,7 +21,7 @@ export default function Help() {
               Secure mode is only available for file encryption and ensures that the encrypted files are stored securely. To decrypt a secure file, you will need to provide the key it was encrypted with in the encryption key field.
             </p>
             <p>
-              When you encrypt a file, the encrypted data shown will display the key it was encrypted with. If you wish to encrypt more files with the same key, click "Copy Key" and paste the key in the encryption key field.
+              When you encrypt a file, the encrypted data shown will display the key it was encrypted with. If you wish to encrypt more files with the same key, click &quot;Copy Key&quot; and paste the key in the encryption key field.
             </p>
           </div>
           <div className="p-4 bg-blue-500 text-white rounded-lg">
