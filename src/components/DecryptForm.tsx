@@ -132,11 +132,11 @@ const DecryptForm = () => {
       </div>
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="fileInput">
-          Select File
+          Select File(s)
         </label>
         <input
           id="fileInput"
-          type="file"
+          type="file"   
           onChange={onSelectFile}
           className="w-full p-2 border border-gray-300 rounded"
           multiple
